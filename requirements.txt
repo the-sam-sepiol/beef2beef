@@ -1,0 +1,2 @@
+cryptography>=41.0.0
+pybluez>=0.23 ; platform_system == "Linux"
