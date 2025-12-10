@@ -58,7 +58,7 @@ class ChatSession:
 
         # update peer label to include username if available
         if self.peer_username:
-            self.peer_label = f"{self.peer_username}@{self.peer_label}"
+            self.peer_label = self.peer_username
 
     def send_message(self, plaintext: str):
         if self.closed:

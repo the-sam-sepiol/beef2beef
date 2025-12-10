@@ -1,6 +1,7 @@
 import socket
 from .base import Transport
 
+
 class TcpTransport(Transport):
     def __init__(self, sock: socket.socket):
         self.sock = sock
@@ -12,13 +13,8 @@ class TcpTransport(Transport):
 
     @classmethod
     def listen(cls, port: int) -> "TcpTransport":
-        ls = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        ls.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        ls.bind(("", port))
-        ls.listen(1)
-        conn, _ = ls.accept()
-        ls.close()
-        return cls(conn)
+        listener = TcpListener(port)
+        return listener.accept()
 
     def send(self, data: bytes) -> None:
         self.sock.sendall(data)
@@ -37,8 +33,25 @@ class TcpTransport(Transport):
         self.sock.close()
 
     def peer_label(self) -> str:
+        return "peer"
+
+
+class TcpListener:
+    """Reusable TCP listener that can accept multiple clients."""
+
+    def __init__(self, port: int, backlog: int = 5):
+        self.port = port
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.sock.bind(("", port))
+        self.sock.listen(backlog)
+
+    def accept(self) -> TcpTransport:
+        conn, _ = self.sock.accept()
+        return TcpTransport(conn)
+
+    def close(self):
         try:
-            host, port = self.sock.getpeername()[:2]
-            return f"{host}:{port}"
-        except OSError:
-            return "peer"
+            self.sock.close()
+        except Exception:
+            pass
