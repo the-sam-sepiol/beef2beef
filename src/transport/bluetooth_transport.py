@@ -7,12 +7,6 @@ except ImportError:
 
 
 class BluetoothTransport(Transport):
-    """RFCOMM transport for Linux using pybluez.
-
-    Requires: pybluez and a working Bluetooth adapter. On macOS/Windows this
-    will raise a RuntimeError unless pybluez + RFCOMM are available.
-    """
-
     def __init__(self, sock, peer_addr: str | None = None):
         if bluetooth is None:
             raise RuntimeError("pybluez not installed; bluetooth transport unavailable")

@@ -1,5 +1,6 @@
-<img src="beef2beef.png" alt="Logo" width="200">
-
+<p style="text-align:center;">
+  <img src="beef2beef.png" alt="Logo" width="200">
+</p>
 Secure end-to-end encrypted chat with TCP (and optional Bluetooth on Linux) plus a PySide6 GUI.
 
 ## Quick Start
